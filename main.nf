@@ -3,7 +3,7 @@
 nextflow.enable.dsl=2
 
 params.reads = 'data/*_{1,2}.fq.gz'
-params.outDir = 'outputs/'
+params.outdir = 'outputs/'
 params.adapters = 'adapters.fa'
 log.info """
       LIST OF PARAMETERS
