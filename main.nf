@@ -19,6 +19,7 @@ adapter_ch = Channel.fromPath(params.adapters)
 
 // Define fastqc process
 process fastqc {
+    label 'fastqc'
     publishDir "${params.outdir}/quality-control-${sample}/", mode: 'copy', overwrite: true
 
     input:
@@ -35,6 +36,7 @@ process fastqc {
 
 // Process trimmomatic
 process trimmomatic {
+    label 'trimmomatic'
     publishDir "${params.outdir}/trimmed-reads-${sample}/", mode: 'copy'
 
     input:
