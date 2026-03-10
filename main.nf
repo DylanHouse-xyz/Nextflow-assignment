@@ -67,7 +67,7 @@ process bwa_mem {
     publishDir "${params.outdir}/bwa-{sample}/" mode: 'copy'
 
     input:
-    tuple val(
+    tuple val(LG12), path(genome), path(trimmed_pasta)
 
     // trimmed fasta files
     //trimmomatic.out.trimmed_fq
@@ -75,7 +75,8 @@ process bwa_mem {
     // index files
 
     output:
-    // samfile
+    path("*_bwamem{sam}")
+
     script:
     """
     bwa-mem2 mem -t4 ${refGenome}
