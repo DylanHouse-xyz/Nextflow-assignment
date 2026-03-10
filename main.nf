@@ -67,7 +67,7 @@ process bwa_mem {
     publishDir "${params.outdir}/bwa-{sample}/" mode: 'copy'
 
     input:
-    tuple
+    tuple val(
 
     // trimmed fasta files
     //trimmomatic.out.trimmed_fq
@@ -85,7 +85,7 @@ process bwa_mem {
 // Run the workflow
 workflow {
     read_pairs_ch.view()
-    fastqc(read_pairs_ch)
-    trimmomatic(read_pairs_ch, adapter_ch)
+    qc_reads = fastqc(read_pairs_ch)
+    trimmomatic(qc_reads, adapter_ch)
     bwa_mem(trimmomatic.out.trimmed_fq, genome_ch, index_ch)
 }
