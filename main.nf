@@ -2,9 +2,9 @@
 
 nextflow.enable.dsl=2
 
-params.reads = 'data/LG12.fasta*'
+params.reads = 'data/*_{1,2}.fq.gz'
 params.outdir = './outputs/'
-params.adapters = 'adapters.fa'
+params.adapters = './adapters.fa'
 log.info """
       LIST OF PARAMETERS
 ================================
