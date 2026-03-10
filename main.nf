@@ -16,7 +16,7 @@ Output-folder    : ${params.outdir}
 Adapters         : ${params.adapters}
 IndexFiles       : ${params.indexFiles}
 IndexDir         : ${params.indexDir}
-Ref_Genome	 : ${prarms.refgenome}
+Ref_Genome	 : ${params.refgenome}
 """
 
 // Create read channel
@@ -82,4 +82,5 @@ workflow {
     read_pairs_ch.view()
     fastqc(read_pairs_ch)
     trimmomatic(read_pairs_ch, adapter_ch)
+    bwa_mem(read_pairs_ch, genome_ch, index_ch)
 }
