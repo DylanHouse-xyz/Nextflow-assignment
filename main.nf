@@ -5,12 +5,16 @@ nextflow.enable.dsl=2
 params.reads = 'data/*_{1,2}.fq.gz'
 params.outdir = './outputs/'
 params.adapters = 'data/adapters.fa'
+params.indexDir = 'data/'
+params.indexFiles = '*data/*.{0123, amb, ann, bwt.2bit.64, pac}'
 log.info """
       LIST OF PARAMETERS
 ================================
 Reads            : ${params.reads}
 Output-folder    : ${params.outdir}
 Adapters         : ${params.adapters}
+IndexFiles       : ${params.indexFiles}
+IndexDir         : ${params.indexDir}
 """
 
 // Create read channel
