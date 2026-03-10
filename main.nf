@@ -83,14 +83,14 @@ process bwa_mem {
     script:
     """
     //bwa-mem2 mem -t4 ${refGenome}
-    bwa-mem2 mem -t4 ${reference} ${reads[0]} ${reads[1]} 
+    bwa-mem2 mem -t4 ${reference} ${reads[0]} ${reads[1]}
     """
 }
 
 // Run the workflow
 workflow {
     read_pairs_ch.view()
-    qc_reads = fastqc(read_pairs_ch)
-    trimmomatic(qc_reads, adapter_ch)
+    fastqc(read_pairs_ch)
+    trimmomatic(read_pairs_ch, adapter_ch)
     bwa_mem(trimmomatic.out.trimmed_fq, genome_ch)
 }
