@@ -22,6 +22,8 @@ Ref_Genome	 : ${prarms.refgenome}
 // Create read channel
 read_pairs_ch = Channel.fromFilePairs(params.reads, checkIfExists: true).map { sample, reads -> tuple(sample, reads.collect { it.toAbsolutePath() }) }
 adapter_ch = Channel.fromPath(params.adapters)
+genome_ch = Channel.fromPath(params.refgenome)
+index_ch = Channel.fromPath(params.indexFiles).collect()
 
 // Define fastqc process
 process fastqc {
