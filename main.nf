@@ -61,6 +61,22 @@ process trimmomatic {
     """
 }
 
+// Process BWA_MEM
+process bwa_mem {
+    label "bwa_mem"
+    publishDir "${params.outdir}/bwa-{sample}/" mode: 'copy'
+    
+    input:
+    
+
+    output:
+
+    script:
+    """
+    
+    """
+}
+
 // Run the workflow
 workflow {
     read_pairs_ch.view()
