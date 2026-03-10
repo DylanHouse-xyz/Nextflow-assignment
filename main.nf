@@ -64,10 +64,13 @@ process trimmomatic {
 // Process BWA_MEM
 process bwa_mem {
     label "bwa_mem"
-    publishDir "${params.outdir}/bwa-{sample}/" mode: 'copy'
+    publishDir "${params.outdir}/bwa-{sample}/", mode: 'copy'
 
     input:
-    tuple val(LG12), path(genome), path(trimmed_pasta)
+    // tuple val(LG12), path(genome), path(trimmed_pasta)
+    path reads
+    path reference
+    // path index
 
     // trimmed fasta files
     //trimmomatic.out.trimmed_fq
@@ -79,7 +82,8 @@ process bwa_mem {
 
     script:
     """
-    bwa-mem2 mem -t4 ${refGenome}
+    //bwa-mem2 mem -t4 ${refGenome}
+    bwa-mem2 mem -t4 ${reference} ${reads[0]} ${reads[1]} 
     """
 }
 
@@ -88,5 +92,5 @@ workflow {
     read_pairs_ch.view()
     qc_reads = fastqc(read_pairs_ch)
     trimmomatic(qc_reads, adapter_ch)
-    bwa_mem(trimmomatic.out.trimmed_fq, genome_ch, index_ch)
+    bwa_mem(trimmomatic.out.trimmed_fq, genome_ch)
 }
