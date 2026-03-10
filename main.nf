@@ -7,6 +7,7 @@ params.outdir = './outputs/'
 params.adapters = 'data/adapters.fa'
 params.indexDir = 'data/'
 params.indexFiles = '*data/*.{0123, amb, ann, bwt.2bit.64, pac}'
+params.refgenome = 'data/*.fasta'
 log.info """
       LIST OF PARAMETERS
 ================================
@@ -15,6 +16,7 @@ Output-folder    : ${params.outdir}
 Adapters         : ${params.adapters}
 IndexFiles       : ${params.indexFiles}
 IndexDir         : ${params.indexDir}
+Ref_Genome	 : ${prarms.refgenome}
 """
 
 // Create read channel
