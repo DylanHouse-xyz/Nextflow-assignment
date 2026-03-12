@@ -6,7 +6,7 @@ params.reads = 'data/*_{1,2}.fq.gz'
 params.outdir = './outputs/'
 params.adapters = 'data/adapters.fa'
 params.indexDir = 'data/'
-params.indexFiles = '*data/*.{0123, amb, ann, bwt.2bit.64, pac}'
+params.indexFiles = '*data/LG12.{0123, amb, ann, bwt.2bit.64, pac}'
 params.refgenome = 'data/*.fasta'
 log.info """
       LIST OF PARAMETERS
@@ -68,15 +68,14 @@ process bwa_mem {
 
     input:
     tuple val(sample), path(reads)
-    path index_file    
+    path index_file
     //val reference_genome
 
     output:
     path("${sample}_bwamem2.sam")
-    
+
     script:
     """
-    //bwa-mem2 mem -t4 ${index_file} ${reads[0]} ${reads[1]} > *bwamem2.sam
     bwa-mem2 mem -t4 ${index_file} ${reads[0]} ${reads[1]} > bwamem2.sam
     """
 }
