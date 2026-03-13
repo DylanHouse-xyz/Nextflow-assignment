@@ -6,8 +6,8 @@ params.reads = 'data/*_{1,2}.fq.gz'
 params.outdir = './outputs/'
 params.adapters = 'data/adapters.fa'
 params.indexDir = 'data/'
-params.indexFiles = '*data/LG12.{0123, amb, ann, bwt.2bit.64, pac}'
-params.refgenome = 'data/*.fasta'
+params.indexFiles = 'data/*.{0123,amb,ann,bwt.2bit.64,pac}'
+params.refgenome = 'data/LG12.fasta'
 log.info """
       LIST OF PARAMETERS
 ================================
@@ -64,11 +64,11 @@ process trimmomatic {
 // Process BWA_MEM
 process bwa_mem {
     label "bwa_mem"
-    publishDir "${params.outdir}/bwa-{sample}/", mode: 'copy'
+    publishDir "${params.outdir}/bwa-${sample}/", mode: 'copy'
 
     input:
     tuple val(sample), path(reads)
-    path index_file
+    val index_file
     //val reference_genome
 
     output:
@@ -76,7 +76,7 @@ process bwa_mem {
 
     script:
     """
-    bwa-mem2 mem -t4 ${index_file} ${reads[0]} ${reads[1]} > bwamem2.sam
+    bwa-mem2 mem -t4 ${index_file} ${reads[0]} ${reads[1]} > "${sample}_bwamem2.sam"
     """
 }
 
@@ -85,5 +85,5 @@ workflow {
     read_pairs_ch.view()
     fastqc(read_pairs_ch)
     trimmomatic(read_pairs_ch, adapter_ch)
-    bwa_mem(trimmomatic.out.trimmed_fq, index_ch)
+    bwa_mem(trimmomatic.out.trimmed_fq, file(params.refgenome).toAbsolutePath())
 }
