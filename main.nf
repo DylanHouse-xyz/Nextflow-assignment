@@ -2,12 +2,12 @@
 
 nextflow.enable.dsl=2
 
-params.reads = 'data/*_{1,2}.fq.gz'
+params.reads = './data/fastas/*_{1,2}.fq.gz'
 params.outdir = './outputs/'
-params.adapters = 'data/adapters.fa'
-params.indexDir = 'data/'
-params.indexFiles = 'data/*.{0123,amb,ann,bwt.2bit.64,pac}'
-params.refgenome = 'data/LG12.fasta'
+params.adapters = './data/adapters.fa'
+params.indexDir = './data/index'
+params.indexFiles = './data/index*.{0123,amb,ann,bwt.2bit.64,pac}'
+params.refgenome = './data/index/LG12.fasta'
 log.info """
       LIST OF PARAMETERS
 ================================
