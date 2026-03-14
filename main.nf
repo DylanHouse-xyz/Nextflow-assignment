@@ -25,60 +25,9 @@ adapter_ch = Channel.fromPath(params.adapters)
 genome_ch = Channel.fromPath(params.refgenome)
 index_ch = Channel.fromPath(params.indexFiles).collect()
 
-// Define fastqc process
-process fastqc {
-    label 'fastqc'
-    publishDir "${params.outdir}/quality-control-${sample}/", mode: 'copy', overwrite: true
-
-    input:
-    tuple val(sample), path(reads)
-
-    output:
-    path("*_fastqc.{zip,html}")
-
-    script:
-    """
-    fastqc ${reads}
-    """
-}
-
-// Process trimmomatic
-process trimmomatic {
-    label 'trimmomatic'
-    publishDir "${params.outdir}/trimmed-reads-${sample}/", mode: 'copy'
-
-    input:
-    tuple val(sample), path(reads)
-    path adapters_file
-
-    output:
-    tuple val("${sample}"), path("${sample}*.trimmed.fq.gz"), emit: trimmed_fq
-    tuple val("${sample}"), path("${sample}*.discarded.fq.gz"), emit: discarded_fq
-
-    script:
-    """
-    trimmomatic PE -phred33 ${reads[0]} ${reads[1]} ${sample}_1.trimmed.fq.gz ${sample}_1.discarded.fq.gz ${sample}_2.trimmed.fq.gz ${sample}_2.discarded.fq.gz ILLUMINACLIP:${adapters_file}:2:30:10
-    """
-}
-
-// Process BWA_MEM
-process bwa_mem {
-    label "bwa_mem"
-    publishDir "${params.outdir}/bwa-${sample}/", mode: 'copy'
-
-    input:
-    tuple val(sample), path(reads)
-    val index_file
-    //val reference_genome
-
-    output:
-    path("${sample}_bwamem2.sam")
-
-    script:
-    """
-    bwa-mem2 mem -t4 ${index_file} ${reads[0]} ${reads[1]} > "${sample}_bwamem2.sam"
-    """
-}
+include { fastqc } from './modules/fastqc'
+include { trimmomatic } from './modules/trimmomatic'
+include { bwa_mem } from './modules/bwa_mem'
 
 // Run the workflow
 workflow {
